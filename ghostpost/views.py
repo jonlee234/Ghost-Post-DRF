@@ -39,3 +39,27 @@ class PostViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(most_voted, many=True)
         return Response(serializer.data)
+
+    @action(detail=False)
+    def all_roasts(self, request):
+        all_roasts = Post.objects.filter(post_type="Roast")
+
+        page = self.paginate_queryset(all_roasts)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(all_roasts, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False)
+    def all_boasts(self, request):
+        all_boasts = Post.objects.filter(post_type="Boast")
+
+        page = self.paginate_queryset(all_boasts)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(all_boasts, many=True)
+        return Response(serializer.data)
